@@ -21,54 +21,9 @@ namespace ffw {
         typedef bool Boolean;
         typedef std::nullptr_t Null;
 
-        class Object: public std::unordered_map<std::string, Node> {
-        public:
-            inline Object() {
-                
-            }
+        class Object;
 
-            inline Object(const std::initializer_list<std::pair<const std::string, Node>>& list) {
-                reserve(list.size());
-                for (auto& pair : list) {
-                    insert(pair);
-                }
-            }
-
-            inline Object& operator = (const std::initializer_list<std::pair<const std::string, Node>>& list) {
-                Object n;
-                n.reserve(list.size());
-                for (auto& pair : list) {
-                    n.insert(pair);
-                }
-                std::swap(*this, n);
-                return *this;
-            }
-
-            inline bool contains(const std::string& key) const {
-                return find(key) != end();
-            }
-
-            inline Node& operator [] (const char* key) {
-                return at(key);
-            }
-
-            inline Node& operator [] (const std::string& key) {
-                return at(key);
-            }
-
-            inline const Node& operator [] (const char* key) const{
-                return at(key);
-            }
-
-            inline const Node& operator [] (const std::string& key) const {
-                return at(key);
-            }
-        };
-
-        class Array: public std::vector<Node> {
-        public:
-            using std::vector<Node>::vector;
-        };
+        class Array;
 
         enum class Type {
             OBJECT,
@@ -169,23 +124,13 @@ namespace ffw {
             content.reset(new Data<Null>(value));
         }
 
-        inline Node(Object value) : content(nullptr) {
-            content.reset(new Data<Object>(std::move(value)));
-        }
+        inline Node(Object value);
 
-        inline Node(Array value) : content(nullptr) {
-            content.reset(new Data<Array>(std::move(value)));
-        }
+        inline Node(Array value);
 
-        inline Node(std::initializer_list<std::pair<const std::string, Node>> list) {
-            Object obj(std::forward<std::initializer_list<std::pair<const std::string, Node>>>(list));
-            content.reset(new Data<Object>(std::move(obj)));
-        }
+        inline Node(std::initializer_list<std::pair<const std::string, Node>> list);
 
-        inline Node(const std::initializer_list<Node>& list) {
-            Array arr(list);
-            content.reset(new Data<Array>(std::move(arr)));
-        }
+        inline Node(const std::initializer_list<Node>& list);
 
         inline virtual ~Node() = default;
 
@@ -217,15 +162,9 @@ namespace ffw {
             return dynamic_cast<Data<Boolean>*>(content.get())->get();
         }
 
-        inline Array& getAsArray() {
-            if (!isArray())throw std::bad_cast();
-            return dynamic_cast<Data<Array>*>(content.get())->get();
-        }
+        inline Array& getAsArray();
 
-        inline Object& getAsObject() {
-            if (!isObject())throw std::bad_cast();
-            return dynamic_cast<Data<Object>*>(content.get())->get();
-        }
+        inline Object& getAsObject();
 
         inline const Integer& getAsInt() const {
             if (!isInt())throw std::bad_cast();
@@ -247,15 +186,9 @@ namespace ffw {
             return dynamic_cast<Data<Boolean>*>(content.get())->get();
         }
 
-        inline const Array& getAsArray() const {
-            if (!isArray())throw std::bad_cast();
-            return dynamic_cast<Data<Array>*>(content.get())->get();
-        }
+        inline const Array& getAsArray() const;
 
-        inline const Object& getAsObject() const {
-            if (!isObject())throw std::bad_cast();
-            return dynamic_cast<Data<Object>*>(content.get())->get();
-        }
+        inline const Object& getAsObject() const;
 
         inline void set(const Integer value) {
             *this = value;
@@ -366,15 +299,9 @@ namespace ffw {
             return *this;
         }
 
-        inline Node& operator = (Array value) {
-            content.reset(new Data<Array>(std::move(value)));
-            return *this;
-        }
+        inline Node& operator = (Array value);
 
-        inline Node& operator = (Object value) {
-            content.reset(new Data<Object>(std::move(value)));
-            return *this;
-        }
+        inline Node& operator = (Object value);
 
         inline Node& operator = (Null value) {
             content.reset(new Data<Null>(value));
@@ -391,25 +318,13 @@ namespace ffw {
             return *this;
         }
 
-        inline Node& operator [] (const std::string& key) {
-            if (empty() || !isObject())throw std::bad_cast();
-            return getAsObject()[key];
-        }
+        inline Node& operator [] (const std::string& key);
 
-        inline const Node& operator [] (const std::string& key) const {
-            if (empty() || !isObject())throw std::bad_cast();
-            return getAsObject().at(key);
-        }
+        inline const Node& operator [] (const std::string& key) const;
 
-        inline Node& operator [] (const size_t n) {
-            if (empty() || !isArray())throw std::bad_cast();
-            return getAsArray()[n];
-        }
+        inline Node& operator [] (const size_t n);
 
-        inline const Node& operator [] (const size_t n) const {
-            if (empty() || !isArray())throw std::bad_cast();
-            return getAsArray()[n];
-        }
+        inline const Node& operator [] (const size_t n) const;
 
         template<class T> inline bool operator == (const T& other) const;
 
@@ -444,6 +359,121 @@ namespace ffw {
         template<class T> inline const T& getAs() const;
         std::unique_ptr<Content> content;
     };
+
+    class Node::Object: public std::unordered_map<std::string, Node> {
+    public:
+        inline Object() = default;
+
+        inline Object(const std::initializer_list<std::pair<const std::string, Node>>& list) {
+            reserve(list.size());
+            for (auto& pair : list) {
+                insert(pair);
+            }
+        }
+
+        inline Object& operator = (const std::initializer_list<std::pair<const std::string, Node>>& list) {
+            Object n;
+            n.reserve(list.size());
+            for (auto& pair : list) {
+                n.insert(pair);
+            }
+            std::swap(*this, n);
+            return *this;
+        }
+
+        inline bool contains(const std::string& key) const {
+            return find(key) != end();
+        }
+
+        inline Node& operator [] (const char* key) {
+            return at(key);
+        }
+
+        inline Node& operator [] (const std::string& key) {
+            return at(key);
+        }
+
+        inline const Node& operator [] (const char* key) const{
+            return at(key);
+        }
+
+        inline const Node& operator [] (const std::string& key) const {
+            return at(key);
+        }
+    };
+
+    class Node::Array: public std::vector<Node> {
+    public:
+        using std::vector<Node>::vector;
+    };
+
+    inline Node::Node(Node::Object value) : content(nullptr) {
+        content.reset(new Data<Object>(std::move(value)));
+    }
+
+    inline Node::Node(Node::Array value) : content(nullptr) {
+        content.reset(new Data<Array>(std::move(value)));
+    }
+
+    inline Node::Node(std::initializer_list<std::pair<const std::string, Node>> list) {
+        Object obj(std::forward<std::initializer_list<std::pair<const std::string, Node>>>(list));
+        content.reset(new Data<Object>(std::move(obj)));
+    }
+
+    inline Node::Node(const std::initializer_list<Node>& list) {
+        Array arr(list);
+        content.reset(new Data<Array>(std::move(arr)));
+    }
+
+    inline Node::Array& Node::getAsArray() {
+        if (!isArray())throw std::bad_cast();
+        return dynamic_cast<Data<Array>*>(content.get())->get();
+    }
+
+    inline Node::Object& Node::getAsObject() {
+        if (!isObject())throw std::bad_cast();
+        return dynamic_cast<Data<Object>*>(content.get())->get();
+    }
+
+    inline const Node::Array& Node::getAsArray() const {
+        if (!isArray())throw std::bad_cast();
+        return dynamic_cast<Data<Array>*>(content.get())->get();
+    }
+
+    inline const Node::Object& Node::getAsObject() const {
+        if (!isObject())throw std::bad_cast();
+        return dynamic_cast<Data<Object>*>(content.get())->get();
+    }
+
+    inline Node& Node::operator = (Array value) {
+        content.reset(new Data<Array>(std::move(value)));
+        return *this;
+    }
+
+    inline Node& Node::operator = (Object value) {
+        content.reset(new Data<Object>(std::move(value)));
+        return *this;
+    }
+
+    inline Node& Node::operator [] (const std::string& key) {
+        if (empty() || !isObject())throw std::bad_cast();
+        return getAsObject()[key];
+    }
+
+    inline const Node& Node::operator [] (const std::string& key) const {
+        if (empty() || !isObject())throw std::bad_cast();
+        return getAsObject().at(key);
+    }
+
+    inline Node& Node::operator [] (const size_t n) {
+        if (empty() || !isArray())throw std::bad_cast();
+        return getAsArray()[n];
+    }
+
+    inline const Node& Node::operator [] (const size_t n) const {
+        if (empty() || !isArray())throw std::bad_cast();
+        return getAsArray()[n];
+    }
 
     template<typename T>
     inline Node::Type modeTypeFromTemplate() {
