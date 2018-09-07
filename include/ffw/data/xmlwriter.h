@@ -2,6 +2,7 @@
 #ifndef FFW_DATA_XML_WRITER
 #define FFW_DATA_XML_WRITER
 
+#include <list>
 #include "datawriter.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

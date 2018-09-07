@@ -2,6 +2,7 @@
 #ifndef FFW_DATA_XML_READER
 #define FFW_DATA_XML_READER
 
+#include <list>
 #include "datareader.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
