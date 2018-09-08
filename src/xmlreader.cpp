@@ -420,7 +420,7 @@ bool ffw::XmlReader::getNext(XmlIterator* value) {
 bool ffw::XmlReader::stepInto() {
     if (child != nullptr) {
         if (child->FirstChildElement()) {
-            cache.push_back(Cache{ child, parent });
+            cache.push_back(Cache(child, parent));
 
             parent = child->ToElement();
             child = nullptr;
@@ -456,6 +456,8 @@ ffw::Node ffw::decodeXml(const std::string& json) {
     ffw::XmlIterator node;
 
     reader.getNext(&node);
-    return node.get();
+    ffw::Node::Object obj;
+    obj.insert(std::make_pair(node.getKey(), node.get()));
+    return obj;
 }
 

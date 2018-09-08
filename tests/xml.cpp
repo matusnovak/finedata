@@ -903,3 +903,36 @@ TEST_CASE("Decode XML escaped character #1", "ffw::XmlReader") {
     REQUIRE(obj["math"].getAsString() == "\xE2\x88\x80\xE2\x88\x81\xE2\x88\x82\xE2\x88\x83\xE2\x88\x84\xE2\x88\x85\xE2\x88\x86\xE2\x88\x87");
     REQUIRE(obj["cjk"].getAsString() == "\xEF\xA4\x80\xEF\xA4\x81\xEF\xA4\x82\xEF\xA4\x83\xEF\xA4\x84\xEF\xA4\x85\xEF\xA4\x86");
 }
+
+TEST_CASE("Decode and encode XML quick and dirty", "ffw::XmlReader") {
+    const auto obj =  ffw::decodeXml(
+        "<menu id=\"file\" value=\"\">"
+            "<popup>"
+                "<menuitem value=\"New\" onclick=\"CreateNewDoc()\">hello</menuitem>"
+                "<menuitem value=\"Open\" onclick=\"OpenDoc()\">123</menuitem>"
+                "<menuitem value=\"Close\" onclick=\"CloseDoc()\">false</menuitem>"
+            "</popup>"
+        "</menu>"
+    );
+
+    static ffw::Node::Object example = { 
+        {"menu", ffw::Node::Object{
+            {"id", "file",},
+            {"value", "File",},
+            {"popup", ffw::Node::Object{
+                {"menuitem", ffw::Node::Array{
+                    ffw::Node::Object{{"value", "New"}, {"onclick", "CreateNewDoc()"}},
+                    ffw::Node::Object{{"value", "Open"}, {"onclick", "OpenDoc()"}},
+                    ffw::Node::Object{{"value", "Close"}, {"onclick", "CloseDoc()"}}
+                }},
+            }},
+        }}
+    };
+
+    REQUIRE_NOTHROW(compare(obj, example));
+
+    const auto testStr = ffw::encodeXml(example);
+    const auto obj2 = ffw::decodeXml(testStr);
+
+    REQUIRE_NOTHROW(compare(obj2, example));
+}

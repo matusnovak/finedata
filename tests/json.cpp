@@ -652,3 +652,40 @@ TEST_CASE("Decode JSON escaped character #1", "ffw::JsonReader") {
     REQUIRE(obj["math"].getAsString() == "\xE2\x88\x80\xE2\x88\x81\xE2\x88\x82\xE2\x88\x83\xE2\x88\x84\xE2\x88\x85\xE2\x88\x86\xE2\x88\x87");
     REQUIRE(obj["cjk"].getAsString() == "\xEF\xA4\x80\xEF\xA4\x81\xEF\xA4\x82\xEF\xA4\x83\xEF\xA4\x84\xEF\xA4\x85\xEF\xA4\x86");
 }
+
+TEST_CASE("Decode and encode JSON quick and dirty", "ffw::JsonReader") {
+    const auto obj = ffw::decodeJson(
+        "{\"menu\": {"
+        "  \"id\": \"file\","
+        "  \"value\": \"File\","
+        "  \"popup\": {"
+        "	\"menuitem\": ["
+        "	  {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},"
+        "	  {\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},"
+        "	  {\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}"
+        "	]"
+        "  }"
+        "}}"
+    );
+
+    static ffw::Node::Object example = {{
+        "menu", ffw::Node::Object{
+            {"id", "file",},
+            {"value", "File",},
+            {"popup", ffw::Node::Object{
+                {"menuitem", ffw::Node::Array{
+                    ffw::Node::Object{{"value", "New"}, {"onclick", "CreateNewDoc()"}},
+                    ffw::Node::Object{{"value", "Open"}, {"onclick", "OpenDoc()"}},
+                    ffw::Node::Object{{"value", "Close"}, {"onclick", "CloseDoc()"}}
+                }},
+            }},
+        }
+    }};
+
+    REQUIRE_NOTHROW(compare(obj, example));
+
+    const auto testStr = ffw::encodeJson(example);
+    const auto obj2 = ffw::decodeJson(testStr);
+
+    REQUIRE_NOTHROW(compare(obj2, example));
+}

@@ -13,13 +13,18 @@ namespace YAML {
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 namespace ffw {
+    /**
+    * @ingroup data
+    */
     class YamlReaderException : public DataReaderException {
     public:
         YamlReaderException(const std::string& msg) :DataReaderException(msg) {
 
         }
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API YamlIterator : public DataIterator {
     public:
         YamlIterator();
@@ -58,7 +63,9 @@ namespace ffw {
         struct Ref;
         std::shared_ptr<Ref> ref;
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API YamlReader : public DataReader {
     public:
         YamlReader(const std::string& src);
@@ -77,14 +84,20 @@ namespace ffw {
         bool stepInto() override;
         bool stepOut() override;
 
+        bool isRootSequence() const;
     private:
         std::unique_ptr<YAML::Node> doc;
 
         struct Cache;
         std::list<Cache> cache;
     };
-
+    /**
+    * @ingroup data
+    */
     FFW_API Node decodeYamlFile(const std::string& path);
+    /**
+    * @ingroup data
+    */
     FFW_API Node decodeYaml(const std::string& json);
 }
 

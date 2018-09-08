@@ -401,7 +401,7 @@ namespace ffw {
             return at(key);
         }
     };
-
+    
     class Node::Array: public std::vector<Node> {
     public:
         using std::vector<Node>::vector;

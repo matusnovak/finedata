@@ -12,13 +12,18 @@ namespace tinyxml2 {
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 namespace ffw {
+    /**
+    * @ingroup data
+    */
     class XmlWriterException : public DataWriterException {
     public:
         XmlWriterException(const std::string& msg) :DataWriterException(msg) {
 
         }
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API XmlWriter : public DataWriter {
     public:
         XmlWriter(bool header = false);
@@ -77,6 +82,14 @@ namespace ffw {
         std::list<Node::Boolean> isArray;
         std::unique_ptr<tinyxml2::XMLPrinter> printer;
     };
+    /**
+    * @ingroup data
+    */
+    FFW_API void encodeXmlFile(const ffw::Node& xml, const std::string& path);
+    /**
+    * @ingroup data
+    */
+    FFW_API std::string encodeXml(const ffw::Node& xml);
 }
 
 inline void swap(ffw::XmlWriter& first, ffw::XmlWriter& second) NOEXCEPT {

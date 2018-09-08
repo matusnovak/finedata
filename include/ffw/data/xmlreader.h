@@ -15,13 +15,18 @@ namespace tinyxml2 {
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 namespace ffw {
+    /**
+    * @ingroup data
+    */
     class XmlReaderException : public DataReaderException {
     public:
         XmlReaderException(const std::string& msg) :DataReaderException(msg) {
 
         }
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API XmlIterator : public DataIterator {
     public:
         XmlIterator();
@@ -63,7 +68,9 @@ namespace ffw {
         const tinyxml2::XMLElement* elem;
         const tinyxml2::XMLAttribute* attr;
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API XmlReader: public DataReader {
     public:
         XmlReader(const std::string& src);
@@ -85,6 +92,10 @@ namespace ffw {
         std::string getRootKey() const;
     private:
         struct Cache {
+            Cache() = default;
+            Cache(const tinyxml2::XMLElement* child, const tinyxml2::XMLElement* parent):
+            child(child),parent(parent) {
+            }
             const tinyxml2::XMLElement* child = nullptr;
             const tinyxml2::XMLElement* parent = nullptr;
         };
@@ -93,8 +104,13 @@ namespace ffw {
         const tinyxml2::XMLElement* child;
         const tinyxml2::XMLElement* parent;
     };
-
+    /**
+    * @ingroup data
+    */
     FFW_API Node decodeXmlFile(const std::string& path);
+    /**
+    * @ingroup data
+    */
     FFW_API Node decodeXml(const std::string& json);
 }
 

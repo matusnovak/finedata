@@ -1,3 +1,4 @@
+#include <fstream>
 #include <json.h>
 #include <ffw/data/jsonwriter.h>
 
@@ -271,4 +272,17 @@ void ffw::JsonWriter::addObject() {
 std::string ffw::JsonWriter::str() const {
     if (!root) throw JsonWriterException("not initialized");
     return std::string(json_object_to_json_string_ext(root.get(), JSON_C_TO_STRING_PRETTY));
+}
+
+void ffw::encodeJsonFile(const ffw::Node& json, const std::string& path) {
+    const auto str = encodeJson(json);
+    std::fstream output(path, std::ios::out);
+    if (!output) throw JsonWriterException("failed to open file");
+    output << str;
+}
+
+std::string ffw::encodeJson(const ffw::Node& json) {
+    ffw::JsonWriter writer;
+    writer.add(json);
+    return writer.str();
 }

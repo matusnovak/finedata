@@ -1,3 +1,4 @@
+#include <fstream>
 #include <yaml-cpp/yaml.h>
 #include <ffw/data/yamlwriter.h>
 
@@ -121,7 +122,7 @@ void ffw::YamlWriter::addArray(const std::string& key) {
     *doc << YAML::Key << key;
     *doc << YAML::Value << YAML::BeginSeq;
 
-    cache.emplace_back();
+    cache.push_back(Cache());
     auto& child = cache.back();
     child.isArray = true;
 }
@@ -132,7 +133,7 @@ void ffw::YamlWriter::addObject(const std::string& key) {
     *doc << YAML::Key << key;
     *doc << YAML::Value << YAML::BeginMap;
 
-    cache.emplace_back();
+    cache.push_back(Cache());
     auto& child = cache.back();
     child.isArray = false;
 }
@@ -200,7 +201,7 @@ void ffw::YamlWriter::addArray() {
 
     *doc << YAML::BeginSeq;
 
-    cache.emplace_back();
+    cache.push_back(Cache());
     auto& child = cache.back();
     child.isArray = true;
 
@@ -211,7 +212,7 @@ void ffw::YamlWriter::addObject() {
 
     *doc << YAML::BeginMap;
 
-    cache.emplace_back();
+    cache.push_back(Cache());
     auto& child = cache.back();
     child.isArray = false;
 }
@@ -220,3 +221,17 @@ std::string ffw::YamlWriter::str() const {
     if (!doc) throw YamlWriterException("not initialized");
     return std::string(doc->c_str());
 }
+
+void ffw::encodeYamlFile(const ffw::Node& yaml, const std::string& path) {
+    const auto str = encodeYaml(yaml);
+    std::fstream output(path, std::ios::out);
+    if (!output) throw YamlWriterException("failed to open file");
+    output << str;
+}
+
+std::string ffw::encodeYaml(const ffw::Node& yaml) {
+    ffw::YamlWriter writer;
+    writer.add(yaml);
+    return writer.str();
+}
+

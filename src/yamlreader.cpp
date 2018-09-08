@@ -175,6 +175,10 @@ ffw::Node::Object ffw::YamlIterator::toObject(const bool attrIgnore) const {
 }
 
 struct ffw::YamlReader::Cache {
+    Cache() = default;
+    Cache(YAML::const_iterator it, YAML::const_iterator end, YAML::Node elem):
+    it(it),end(end),elem(elem) {
+    }
     YAML::const_iterator it;
     YAML::const_iterator end;
     YAML::Node elem;
@@ -193,23 +197,27 @@ ffw::YamlReader::YamlReader(const char* src) {
         *doc = YAML::Load(src);
 
         if (doc->IsMap()) {
-            cache.push_back({
+            cache.push_back(Cache(
                 doc->begin(),
                 doc->end(),
                 *doc
-            });
+            ));
         } else if (doc->IsSequence()) {
-            cache.push_back({
+            cache.push_back(Cache(
                 YAML::const_iterator(),
                 YAML::const_iterator(),
                 *doc
-            });
+            ));
         } else {
             throw YamlReaderException("the root must start with a map or a sequence");
         }
     } catch (std::exception& e) {
         throw YamlReaderException(e.what());
     }
+}
+
+bool ffw::YamlReader::isRootSequence() const {
+    return doc->IsSequence();
 }
 
 ffw::YamlReader::YamlReader(YamlReader&& other) NOEXCEPT : doc(nullptr) {
@@ -279,20 +287,20 @@ bool ffw::YamlReader::stepInto() {
             auto now = child.elem[child.idx];
 
             if (now.IsMap()) {
-                cache.push_back({
+                cache.push_back(Cache(
                     now.begin(),
                     now.end(),
                     now
-                });
+                ));
                 return true;
             } 
             
             if (now.IsSequence()) {
-                cache.push_back({
+                cache.push_back(Cache(
                     YAML::const_iterator(),
                     YAML::const_iterator(),
                     now
-                });
+                ));
                 return true;
             } 
             
@@ -303,20 +311,20 @@ bool ffw::YamlReader::stepInto() {
             auto now = child.it->second;
             
             if (now.IsMap()) {
-                cache.push_back({
+                cache.push_back(Cache(
                     now.begin(),
                     now.end(),
                     now
-                });
+                ));
                 return true;
             }
             
             if (now.IsSequence()) {
-                cache.push_back({
+                cache.push_back(Cache(
                     YAML::const_iterator(),
                     YAML::const_iterator(),
                     now
-                });
+                ));
                 return true;
             }
             
@@ -347,6 +355,17 @@ ffw::Node ffw::decodeYaml(const std::string& json) {
     ffw::YamlReader reader(json);
     ffw::YamlIterator node;
 
-    reader.getNext(&node);
-    return node.get();
+    if (reader.isRootSequence()) {
+        Node::Array arr;
+        while(reader.getNext(&node)) {
+            arr.push_back(node.get());
+        }
+        return arr;
+    } else {
+        Node::Object obj;
+        while (reader.getNext(&node)) {
+            obj.insert(std::make_pair(node.getKey(), node.get()));
+        }
+        return obj;
+    }
 }

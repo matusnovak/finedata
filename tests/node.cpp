@@ -129,8 +129,7 @@ TEST_CASE("Testing Any Object", "ffw::Node::Object") {
     REQUIRE_NOTHROW(copy = o["world"]);
     REQUIRE(42.0f == (double)o["world"]);
 
-    REQUIRE_NOTHROW(copy = o["error"]);
-    REQUIRE_THROWS(copy = o["error"]["error"]);
+    REQUIRE_THROWS(copy = o["error"]);
 
     ffw::Node::Object obj = {
         { "first", 10 },

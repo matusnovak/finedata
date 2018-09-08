@@ -2,10 +2,10 @@
 
 |         | CircleCI | TravisCI | AppVeyor |
 |---------|----------|----------|----------|
-| master  | [![CircleCI](https://circleci.com/gh/matusnovak/finedata/tree/master.svg?style=svg)](https://circleci.com/gh/matusnovak/finedata/tree/master) | [![Build Status](https://travis-ci.org/matusnovak/finedata.svg?branch=master)](https://travis-ci.org/matusnovak/finedata) | [![Build status](https://ci.appveyor.com/api/projects/status/7ptts9y3grin6jqs/branch/master?svg=true)](https://ci.appveyor.com/project/matusnovak/finedata/branch/devel) |
+| master  | [![CircleCI](https://circleci.com/gh/matusnovak/finedata/tree/master.svg?style=svg)](https://circleci.com/gh/matusnovak/finedata/tree/master) | [![Build Status](https://travis-ci.org/matusnovak/finedata.svg?branch=master)](https://travis-ci.org/matusnovak/finedata) | [![Build status](https://ci.appveyor.com/api/projects/status/7ptts9y3grin6jqs/branch/master?svg=true)](https://ci.appveyor.com/project/matusnovak/finedata/branch/master) |
 | devel  | [![CircleCI](https://circleci.com/gh/matusnovak/finedata/tree/devel.svg?style=svg)](https://circleci.com/gh/matusnovak/finedata/tree/devel) | [![Build Status](https://travis-ci.org/matusnovak/finedata.svg?branch=devel)](https://travis-ci.org/matusnovak/finedata) | [![Build status](https://ci.appveyor.com/api/projects/status/7ptts9y3grin6jqs/branch/devel?svg=true)](https://ci.appveyor.com/project/matusnovak/finedata/branch/devel) |
 
-*The following compilers are tested in the CI above: Visual Studio 2013, Visual Studio 2013 Win64, Visual Studio 2015, Visual Studio 2015 Win64, Visual Studio 2017, Visual Studio 2017 Win64, MinGW-w64 i686, MinGW-w64 x86_64, Linux GCC 5.5.0, Linux GCC 6.4.0, Linux GCC 5.5.0, Linux GCC 7.3.0, and OSX Clang 3.7*
+*The following compilers are tested in the CI above: Visual Studio 2015, Visual Studio 2015 Win64, Visual Studio 2017, Visual Studio 2017 Win64, MinGW-w64 i686, MinGW-w64 x86_64, Linux GCC 5.5.0, Linux GCC 6.4.0, Linux GCC 5.5.0, Linux GCC 7.3.0, and OSX Clang 3.7*
 
 ## Introduction 
 
@@ -21,19 +21,15 @@ This library also bundles all third party libraries statically. Meaning, you onl
 
 All dependencies listed here are already included as a git submodule and will be statically linked to the fineframework library. Therefore, no need to compile them manually, nor link them manually! Everything is automated via CMake.
 
-* [freetype2](https://www.freetype.org/) - Used by NanoVG for font loading
-* [glfw](https://www.glfw.org/) - Used as a primary backend (ffw::GLRenderWindow) for creating GL context and handling user input
-* [libpng](https://github.com/glennrp/libpng) - Needed by FreeType2
-* [nanovg](https://github.com/memononen/nanovg) - Used as a 2D canvas rendering backend
-* [tinyobjloader](https://github.com/syoyo/tinyobjloader.git) - Only used in examples
-* [zlib](https://github.com/madler/zlib) - Needed by FreeType2
-* [bzip2](https://github.com/enthought/bzip2-1.0.6) - Needed by FreeType2
+* [tinyxml2](https://github.com/leethomason/tinyxml2.git) - For parsing XML files
+* [json-c](https://github.com/json-c/json-c.git) - For parsing JSON files
+* [yaml-cpp](https://github.com/jbeder/yaml-cpp.git) - For parsing YAML files
 
 ## TODO
 
 * More examples, documentation, and tutorials
 * More unit tests
-* Vulkan (maybe)
+* Add CSV and INI data structures support
 
 ## Quick example
 
@@ -142,7 +138,6 @@ int main(int argc, char *argv[]) {
 
 One of the following compilers:
 
-* (Windows) Visual Studio 2013 32-bit or 64-bit
 * (Windows) Visual Studio 2015 32-bit or 64-bit
 * (Windows) Visual Studio 2017 32-bit or 64-bit
 * (Windows) MinGW-w64 i686
@@ -172,11 +167,7 @@ Documentation can be found at <http://matusnovak.github.io/finedata/>
 
 ## Examples
 
-All examples are located in the [examples folder](examples/README.md).
-
-## Alternatives
-
-Looking for alternative library or framework? Try OpenFrameworks, SFML, or Cinder (be warned, they are much more bigger, but feature rich).
+All examples are located in the examples folder.
 
 ## Contributing
 

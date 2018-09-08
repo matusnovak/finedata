@@ -592,3 +592,41 @@ TEST_CASE("Decode and encode YAML #3", "ffw::YamlReader") {
 
     REQUIRE_NOTHROW(compare(obj, example["web-app"]));
 }
+
+TEST_CASE("Decode and encode YAML quick and dirty", "ffw::YamlReader") {
+    const auto obj = ffw::decodeYaml(
+        "menu:\n"
+        "  # Some comment\n"
+        "  id: 'file'\n"
+        "  value: 'File'\n"
+        "  popup:\n"
+        "     menuitem:\n"
+        "       - value: 'New'\n"
+        "         onclick: 'CreateNewDoc()'\n"
+        "       - value: 'Open'\n"
+        "         onclick: 'OpenDoc()'\n"
+        "       - value: 'Close'\n"
+        "         onclick: 'CloseDoc()'\n"
+    );
+
+    static ffw::Node::Object example = {{
+        "menu", ffw::Node::Object{
+            {"id", "file",},
+            {"value", "File",},
+            {"popup", ffw::Node::Object{
+                {"menuitem", ffw::Node::Array{
+                    ffw::Node::Object{{"value", "New"}, {"onclick", "CreateNewDoc()"}},
+                    ffw::Node::Object{{"value", "Open"}, {"onclick", "OpenDoc()"}},
+                    ffw::Node::Object{{"value", "Close"}, {"onclick", "CloseDoc()"}}
+                }},
+            }},
+        }
+    }};
+
+    REQUIRE_NOTHROW(compare(obj, example));
+
+    const auto testStr = ffw::encodeYaml(example);
+    const auto obj2 = ffw::decodeYaml(testStr);
+
+    REQUIRE_NOTHROW(compare(obj2, example));
+}

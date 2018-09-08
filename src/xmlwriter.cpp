@@ -1,3 +1,4 @@
+#include <fstream>
 #include <tinyxml2.h>
 #include <ffw/data/xmlwriter.h>
 
@@ -299,11 +300,26 @@ void ffw::XmlWriter::pushAttributes(const Node::Object& attributes) const {
     for (const auto& attr : attributes) {
         switch (attr.second.getType()) {
             case Node::Type::FLOAT: printer->PushAttribute(attr.first.c_str(), attr.second.getAsFloat()); break;
-            case Node::Type::INTEGER: printer->PushAttribute(attr.first.c_str(), attr.second.getAsInt()); break;
+            case Node::Type::INTEGER: printer->PushAttribute(attr.first.c_str(), static_cast<unsigned>(attr.second.getAsInt())); break;
             case Node::Type::STRING: printer->PushAttribute(attr.first.c_str(), attr.second.getAsString().c_str()); break;
             case Node::Type::BOOLEAN: printer->PushAttribute(attr.first.c_str(), attr.second.getAsBool() ? "true" : "false"); break;
             case Node::Type::NULLVAL: printer->PushAttribute(attr.first.c_str(), "null"); break;
             default: break;
         }
     }
+}
+
+void ffw::encodeXmlFile(const ffw::Node& xml, const std::string& path) {
+    const auto str = encodeXml(xml);
+    std::fstream output(path, std::ios::out);
+    if (!output) throw XmlWriterException("failed to open file");
+    output << str;
+}
+
+std::string ffw::encodeXml(const ffw::Node& xml) {
+    if (!xml.isObject()) throw XmlWriterException("root must be an object");
+    const auto& obj = xml.getAsObject();
+    ffw::XmlWriter writer;
+    writer.add(obj.begin()->first, obj.begin()->second);
+    return writer.str();
 }

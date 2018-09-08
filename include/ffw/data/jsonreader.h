@@ -14,13 +14,18 @@ struct json_object_iterator;
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 namespace ffw {
+    /**
+    * @ingroup data
+    */
     class JsonReaderException : public DataReaderException {
     public:
         JsonReaderException(const std::string& msg) :DataReaderException(msg) {
 
         }
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API JsonIterator : public DataIterator {
     public:
         JsonIterator();
@@ -59,7 +64,9 @@ namespace ffw {
         const char* key;
         int type;
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API JsonReader : public DataReader {
     public:
         JsonReader(const std::string& src);
@@ -88,8 +95,13 @@ namespace ffw {
         std::list<Cache> cache;
         json_object* now;
     };
-
+    /**
+    * @ingroup data
+    */
     FFW_API Node decodeJsonFile(const std::string& path);
+    /**
+    * @ingroup data
+    */
     FFW_API Node decodeJson(const std::string& json);
 }
 

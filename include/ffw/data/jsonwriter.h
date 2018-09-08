@@ -14,13 +14,18 @@ struct json_object_iterator;
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 namespace ffw {
+    /**
+    * @ingroup data
+    */
     class JsonWriterException : public DataWriterException {
     public:
         JsonWriterException(const std::string& msg) :DataWriterException(msg) {
 
         }
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API JsonWriter : public DataWriter {
     public:
         JsonWriter();
@@ -63,6 +68,14 @@ namespace ffw {
         struct Cache;
         std::list<Cache> cache;
     };
+    /**
+    * @ingroup data
+    */
+    FFW_API void encodeJsonFile(const ffw::Node& json, const std::string& path);
+    /**
+    * @ingroup data
+    */
+    FFW_API std::string encodeJson(const ffw::Node& json);
 }
 
 inline void swap(ffw::JsonWriter& first, ffw::JsonWriter& second) NOEXCEPT {

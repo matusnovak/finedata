@@ -12,13 +12,18 @@ namespace YAML {
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 namespace ffw {
+    /**
+    * @ingroup data
+    */
     class YamlWriterException : public DataWriterException {
     public:
         YamlWriterException(const std::string& msg) :DataWriterException(msg) {
 
         }
     };
-
+    /**
+    * @ingroup data
+    */
     class FFW_API YamlWriter : public DataWriter {
     public:
         YamlWriter();
@@ -57,6 +62,14 @@ namespace ffw {
         struct Cache;
         std::list<Cache> cache;
     };
+    /**
+    * @ingroup data
+    */
+    FFW_API void encodeYamlFile(const ffw::Node& yaml, const std::string& path);
+    /**
+    * @ingroup data
+    */
+    FFW_API std::string encodeYaml(const ffw::Node& yaml);
 }
 
 inline void swap(ffw::YamlWriter& first, ffw::YamlWriter& second) NOEXCEPT {
