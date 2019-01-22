@@ -19,7 +19,7 @@ This library also bundles all third party libraries statically. Meaning, you onl
 
 ## Dependencies
 
-All dependencies listed here are already included as a git submodule and will be statically linked to the fineframework library. Therefore, no need to compile them manually, nor link them manually! Everything is automated via CMake.
+All dependencies listed here are already included as a git submodule and will be statically linked to the finedata library. Therefore, no need to compile them manually, nor link them manually! Everything is automated via CMake.
 
 * [tinyxml2](https://github.com/leethomason/tinyxml2.git) - For parsing XML files
 * [json-c](https://github.com/json-c/json-c.git) - For parsing JSON files

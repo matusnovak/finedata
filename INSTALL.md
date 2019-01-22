@@ -40,7 +40,7 @@ Please note that if you have downloaded the finedata from the GitHub releases, t
 3. In Configuration Properties -> C++ -> General -> Additional Include Directories add `C:\path\to\finedata\install\include`.
 4. In Configuration Properties -> Linker -> General -> Additional Library Directories add  `C:\path\to\finedata\install\lib`.
 5. In Configuration Properties -> Linker -> Input -> Additional Dependencies add `finedata.lib`.
-6. Copy the `fineframework.dll` from `C:\path\to\finedata\install\bin` to your project build directory (where your project exe will be generated). This is not needed during the compilation, but you will need it to distribute or run the program. Otherwise you will get "The program can't start because finedata.dll is missing from your computer. Alternatively, put it in your PATH variable.
+6. Copy the `finedata.dll` from `C:\path\to\finedata\install\bin` to your project build directory (where your project exe will be generated). This is not needed during the compilation, but you will need it to distribute or run the program. Otherwise you will get "The program can't start because finedata.dll is missing from your computer. Alternatively, put it in your PATH variable.
 
 ## Linux
 
